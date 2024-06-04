@@ -20,5 +20,5 @@ export type TaskQueryParams = {
   title?: string;
   status?: string;
   sortField?: string;
-  sortOrder?: string;
+  sortDirection?: string;
 };

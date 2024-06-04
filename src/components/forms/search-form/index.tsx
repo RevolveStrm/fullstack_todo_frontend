@@ -28,8 +28,8 @@ export const SearchForm = () => {
     const newParams = new URLSearchParams(searchParams.toString());
 
     const params = {
-      sortField: data?.priority?.split("_")[0],
-      sortOrder: data?.priority?.split("_")[1],
+      sortField: data?.priority?.split("_")?.[0]?.toLowerCase(),
+      sortDirection: data?.priority?.split("_")?.[1]?.toLowerCase(),
       title: data.title,
       status: data.status,
     };
@@ -48,10 +48,10 @@ export const SearchForm = () => {
       newParams.delete("sortField");
     }
 
-    if (filteredParams?.sortOrder) {
-      newParams.set("sortOrder", `${params.sortOrder}`);
+    if (filteredParams?.sortDirection) {
+      newParams.set("sortDirection", `${params.sortDirection}`);
     } else {
-      newParams.delete("sortOrder");
+      newParams.delete("sortDirection");
     }
 
     if (filteredParams?.status) {
