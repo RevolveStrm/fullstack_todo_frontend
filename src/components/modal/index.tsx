@@ -1,6 +1,6 @@
-"use client";
-import { useCallback, useRef, useEffect, MouseEventHandler } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useRouter } from 'next/navigation';
+import { MouseEventHandler, useCallback, useEffect, useRef } from 'react';
 
 type Props = React.PropsWithChildren & {};
 
@@ -24,19 +24,19 @@ export function Modal({ children }: Props) {
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") onDismiss();
+      if (e.key === 'Escape') onDismiss();
     },
     [onDismiss],
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
-    document.body.style.overflow = "hidden";
+    document.addEventListener('keydown', onKeyDown);
+    document.body.style.overflow = 'hidden';
 
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto';
 
-      return document.removeEventListener("keydown", onKeyDown);
+      return document.removeEventListener('keydown', onKeyDown);
     };
   }, [onKeyDown]);
 
@@ -48,7 +48,8 @@ export function Modal({ children }: Props) {
     >
       <div
         ref={wrapper}
-        className="absolute left-1/2 top-1/2 flex w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl border-2 border-heliotrope bg-zinc-50 p-16"
+        className="absolute left-1/2 top-1/2 flex w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl 
+        border border-gray-800 bg-zinc-50 dark:bg-black p-16"
       >
         {children}
       </div>

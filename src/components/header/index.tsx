@@ -1,35 +1,31 @@
 "use client";
 
+import { ListTodo } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import {cn} from "@/utils/cn";
+import React from "react";
+import { ModeToggle } from "../theme-toggle";
+import { UserNav } from "../user-nav";
 
-export const Header = () => {
-  const pathname = usePathname();
+interface Props {
+  showUserNav: boolean;
+}
 
-  const disableCreateButton = pathname !== "/";
+export const Header: React.FC<Props> = ({ showUserNav }) => {
+  const { data: session } = useSession();
+
+  const email: string = session?.email ?? "N/A";
 
   return (
     <header className="w-full border-b">
-      <div className="flex mx-auto w-full items-center justify-between px-12 py-5 container">
+      <div className="flex mx-auto w-full items-center justify-between px-4 lg:px-12 py-2">
         <Link href="/">
-          <Image src='images/logo.svg' alt="Logo" width={64} height={64}/>
+          <ListTodo size={48} />
         </Link>
-        <Link
-          href="/create"
-          className={cn("flex items-center justify-between shadow-sm rounded-2xl border-2 px-7 py-4 gap-3 transition duration-100 hover:scale-95",
-              {"pointer-events-none" : disableCreateButton}
-          )}
-          scroll={false}
-        >
-          <span className={ cn("font-sans text-xl text-zinc-800",
-              {"text-zinc-400": disableCreateButton}
-          )}
-          >
-            Create task
-          </span>
-        </Link>
+        <div className="flex gap-4">
+          <ModeToggle />
+          {showUserNav && session && <UserNav email={email} />}
+        </div>
       </div>
     </header>
   );

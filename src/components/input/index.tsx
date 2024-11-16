@@ -1,29 +1,22 @@
-import React from "react";
-import { Icon } from "../icon";
-import { Error } from "./error";
-import { cn } from "@/utils/cn";
+import { cn } from '@/utils/cn';
+import React from 'react';
+import { Error } from './error';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  icon?: string;
+  icon?: React.ReactNode;
   error?: string;
 };
 
 const _Input = (
-  { icon, error, className, ...rest }: InputProps,
+  { error, className, ...rest }: InputProps,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) => {
   return (
-    <div
-      className={cn(
-        "flex w-80 flex-col items-center justify-center",
-        className,
-      )}
-    >
-      <div className="flex w-80 items-center rounded-2xl border-2 border-friar-gray bg-white px-5 py-3">
-        {icon && <Icon icon={`${icon}`} />}
+    <div className={cn('flex flex-col items-center justify-center w-full', className)}>
+      <div className="flex w-full items-center rounded-md border border-black/30 dark:border-gray-500 dark:bg-black px-2 py-2">
         <input
           ref={ref}
-          className="ml-3 flex w-full items-center font-sans text-base text-black caret-black outline-none placeholder:text-friar-gray"
+          className="ml-1 flex w-full items-center font-sans text-base outline-none dark:bg-black"
           {...rest}
         />
       </div>

@@ -1,43 +1,46 @@
-import "./globals.css";
-import "../../public/fonts/icons/style.css";
-import "react-toastify/dist/ReactToastify.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { QueryProvider } from "@/components/query-provider/query-provider";
-import { Header } from "@/components/header";
-import {Container} from "@/components/container";
-import {ToastProvider} from "@/components/toast-provider/toast-provider";
-import {Footer} from "@/components/footer";
+import './globals.css';
+import '../../public/fonts/icons/style.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { Header } from '@/components/header';
+import { Providers } from '@/components/providers';
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
 
 const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-space-inter",
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-space-inter',
 });
 
 export const metadata: Metadata = {
-  title: "TODO App",
-  description: "Best todo application!",
+  title: 'TODO App',
+  description: 'Best todo application!',
 };
 
-type Props = React.PropsWithChildren & {
-  createTaskModal: React.ReactNode;
+export const viewport: Viewport = {
+  initialScale: 1,
+  width: 'device-width',
 };
 
-export default function RootLayout({ children, createTaskModal }: Props) {
+type Props = React.PropsWithChildren & {};
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={`${ inter.variable } bg-zinc-50 text-zinc-900 min-h-screen`}>
-      <ToastProvider>
-        <QueryProvider>
-          <Container>
-            <Header />
-                {children}
-                {createTaskModal}
-            <Footer/>
-          </Container>
-        </QueryProvider>
-      </ToastProvider>
+      <head>
+        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+        <link rel="shortcut icon" href="favicon/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+        <link rel="manifest" href="favicon/site.webmanifest" />
+      </head>
+      <body
+        className={`${inter.variable} min-h-screen min-w-full light:bg-zinc-50 light:text-zinc-900 dark:bg-neutral-950 dark:text-neutral-50`}
+      >
+        <Providers>
+          <Header showUserNav />
+          {children}
+        </Providers>
       </body>
     </html>
   );

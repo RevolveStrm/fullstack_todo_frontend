@@ -1,22 +1,11 @@
-export enum TaskStatus {
-  "DONE" = "DONE",
-  "UNDONE" = "UNDONE",
-}
+import { Task } from './schema';
 
-export type Task = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  title: string;
-  priority: number;
-  status: TaskStatus;
-};
+export type CreateTask = Pick<Task, 'title' | 'priority'>;
 
-export type CreateTask = Pick<Task, "title" | "priority">;
-
-export type UpdateTask = Pick<Task, "status">;
+export type UpdateTask = Pick<Task, 'status' | 'priority'>;
 
 export type TaskQueryParams = {
+  page?: string;
   title?: string;
   status?: string;
   sortField?: string;

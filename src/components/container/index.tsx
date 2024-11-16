@@ -1,13 +1,15 @@
-import React from "react";
+import { cn } from '@/lib/utils';
+import React from 'react';
 
 type Props = {
-    children: React.ReactNode;
-}
+  className?: string;
+  children: React.ReactNode;
+};
 
-export const Container = ({ children }: Props) => {
-    return (
-        <div className="max-w-[1100px] mx-auto bg-white min-h-screen flex flex-col justify-between border-l border-r">
-            {children}
-        </div>
-    );
+export const Container = ({ children, className }: Props) => {
+  return (
+    <div className={cn('max-w-[1024px] mx-auto flex flex-col justify-between', className)}>
+      {children}
+    </div>
+  );
 };

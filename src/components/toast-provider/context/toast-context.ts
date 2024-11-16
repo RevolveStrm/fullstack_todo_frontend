@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
 import { createContext } from 'react';
-import { ToastType } from "@/components/toast-provider/helpers/show-toast";
+import { ToastType } from '@/components/toast-provider/helpers/show-toast';
 
 type ToastContextType = {
-    showToast: (type: ToastType, message: string) => void;
+  showToast: (type: ToastType, message: string) => void;
 };
 
 export const ToastContext = createContext<ToastContextType>({
-    showToast: () => {},
+  showToast: () => {},
 });
