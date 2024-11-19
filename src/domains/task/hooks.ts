@@ -1,13 +1,17 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { createTask, deleteTask, getAllTasks, getTask, updateTask } from './services';
 import { CreateTask, TaskQueryParams, UpdateTask } from './types';
 
-export const useTask = (id: string, { enabled = true } = {}) =>
-  useQuery({
+export const useTask = (id: string) =>
+  useSuspenseQuery({
     queryKey: ['task', id],
     queryFn: () => getTask(id),
-    placeholderData: keepPreviousData,
-    enabled,
   });
 
 export const useTasks = (params: TaskQueryParams, { enabled = true } = {}) =>

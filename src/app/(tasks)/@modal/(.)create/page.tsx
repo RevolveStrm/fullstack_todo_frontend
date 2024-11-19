@@ -1,5 +1,5 @@
-import { Modal } from '@/components/modal';
-import { CreateTaskForm } from './form';
+import { Modal } from "@/components/modal";
+import { CreateTaskForm } from "./_components/create-task-form";
 
 const CreateTaskPage = () => {
   return (

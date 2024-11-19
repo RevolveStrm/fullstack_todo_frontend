@@ -1,6 +1,6 @@
+import { LucideIcon } from "lucide-react";
 import React from "react";
-import { Controller } from "react-hook-form";
-import { statuses } from "../../app/(tasks)/tasks/_components/tasks-table/constants";
+import { Controller, useFormContext } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -9,23 +9,33 @@ import {
   SelectValue,
 } from "../ui/select";
 
+type SelectItem = {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+};
+
 interface Props {
+  name: string;
   className?: string;
-  control: any;
+  placeholder?: string;
+  items: SelectItem[];
 }
 
-export const StatusSelect: React.FC<Props> = ({ control }) => {
+export const CustomSelect: React.FC<Props> = ({ name, placeholder, items }) => {
+  const { control } = useFormContext();
+
   return (
     <Controller
       control={control}
-      name="status"
+      name={name}
       render={({ field: { onChange, value } }) => (
         <Select onValueChange={onChange} defaultValue={value}>
           <SelectTrigger className="w-full py-2 border">
-            <SelectValue placeholder="Choose task status" />
+            <SelectValue placeholder={placeholder ?? "Choose a value"} />
           </SelectTrigger>
           <SelectContent>
-            {statuses.map((p) => (
+            {items.map((p) => (
               <SelectItem key={p.value} value={p.value}>
                 {p.label}
               </SelectItem>

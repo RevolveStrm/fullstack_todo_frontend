@@ -1,8 +1,9 @@
-import { Container } from '@/components/container';
-import { Task } from '@/components/task';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { Task } from "@/app/(tasks)/tasks/[id]/_components/task";
+import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
 
 export default function TaskPage({
   params: { id },
@@ -17,7 +18,16 @@ export default function TaskPage({
             Back to tasks <ArrowLeft />
           </Button>
         </Link>
-        <Task id={id} />
+
+        <Suspense
+          fallback={
+            <h1 className="text-2xl text-yellow-400 animate-pulse">
+              LOADING TASK...
+            </h1>
+          }
+        >
+          <Task id={id} />
+        </Suspense>
       </Container>
     </main>
   );
