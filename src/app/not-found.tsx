@@ -1,13 +1,25 @@
-import Link from 'next/link';
+import { Container } from "@/components/container";
+import { MoveLeftIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="flex h-full flex-col items-center justify-between items-center px-24 py-12">
-      <h1 className="font-sans text-5xl font-semibold">🥲</h1>
-      <h2 className="font-sans text-3xl font-semibold py-[20px]">Page not found!</h2>
-      <Link href={'/'} className="text-md font-semibold text-blue-400 hover:text-blue-600">
-        Back to your tasks
-      </Link>
+    <main className="flex items-center justify-center">
+      <Container className="text-center mt-10">
+        <h1 className="text-4xl font-bold text-black dark:text-white mb-4">
+          404 - Page Not Found
+        </h1>
+        <p className="text-black dark:text-white mb-6">
+          Sorry, the page you were looking for does not exist.
+        </p>
+        <Link
+          href="/"
+          className="flex gap-2 bg-black text-white dark:bg-white dark:text-black px-6 py-3 rounded-lg font-medium transition"
+        >
+          <MoveLeftIcon />
+          Back to home
+        </Link>
+      </Container>
     </main>
   );
 }

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { SignInForm } from '../sign-in-form';
-import { SignUpForm } from '../sign-up-form';
+import React from "react";
+import { SignInForm } from "../sign-in-form";
+import { SignUpForm } from "../sign-up-form";
 
 interface Props {
   className?: string;
