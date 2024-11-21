@@ -2,23 +2,20 @@
 import { priorities } from "@/app/(tasks)/tasks/_components/tasks-table/constants";
 import { CustomSelect } from "@/components/custom-select";
 import { Spinner } from "@/components/spinner";
-import { ToastContext } from "@/components/toast-provider/context/toast-context";
-import { ToastType } from "@/components/toast-provider/helpers/show-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAddTask } from "@/domains/task/hooks";
 import { ErrorHelpers } from "@/services/error/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { z } from "zod";
 import { createTaskSchema } from "./constants";
 
 type CreateTaskFormData = z.infer<typeof createTaskSchema>;
 
 export const CreateTaskForm = () => {
-  const { showToast } = useContext(ToastContext);
   const { mutateAsync: createTaskAction } = useAddTask();
   const router = useRouter();
 
@@ -31,14 +28,14 @@ export const CreateTaskForm = () => {
     try {
       await createTaskAction(data, {
         onSuccess() {
-          showToast(ToastType.SUCCESS, "New task is created!");
+          toast.success("New task is created!");
           router.back();
         },
       });
     } catch (error) {
       const message = ErrorHelpers.getMessage(error);
       if (message) {
-        showToast(ToastType.ERROR, message);
+        toast.error(message);
       }
     }
   });

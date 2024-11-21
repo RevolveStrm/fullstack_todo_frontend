@@ -1,10 +1,6 @@
 "use client";
 
 import { Spinner } from "@/components/spinner";
-import {
-  ToastType,
-  showToast,
-} from "@/components/toast-provider/helpers/show-toast";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,10 +13,10 @@ import {
 import { useTask, useUpdateTask } from "@/domains/task";
 import type { Task as TaskT } from "@/domains/task";
 import { ErrorHelpers } from "@/services/error/helpers";
-import { CalendarIcon, Pencil, Save } from "lucide-react";
+import { CalendarIcon, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { EditForm } from "../edit-form";
 
 type Props = {
@@ -35,7 +31,7 @@ export type TaskFormValues = Pick<
 export const Task: React.FC<Props> = ({ id }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const { data: task, data, isLoading, error } = useTask(id);
+  const { data: task, isLoading, error } = useTask(id);
   const { mutateAsync: updateTaskAction } = useUpdateTask();
 
   const onSubmit = async (data: TaskFormValues) => {
@@ -44,19 +40,17 @@ export const Task: React.FC<Props> = ({ id }) => {
         { id: task.id, data },
         {
           onSuccess() {
-            showToast(ToastType.SUCCESS, `Updated task ${task.title}`);
+            toast.success(`Updated task ${task.title}`);
           },
         }
       );
     } catch (error) {
       const message: string | undefined = ErrorHelpers.getMessage(error);
       if (message) {
-        showToast(ToastType.ERROR, message);
+        toast.error(message);
       }
     }
   };
-
-  console.log(data, isLoading, error);
 
   if (isLoading) {
     return (

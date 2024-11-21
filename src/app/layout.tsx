@@ -1,4 +1,4 @@
-import "./globals.css";
+import "../styles/globals.css";
 import "../../public/fonts/icons/style.css";
 import "react-toastify/dist/ReactToastify.css";
 import { Providers } from "@/components/providers";

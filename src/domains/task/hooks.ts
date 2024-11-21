@@ -6,18 +6,20 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import { createTask, deleteTask, getAllTasks, getTask, updateTask } from './services';
-import { CreateTask, TaskQueryParams, UpdateTask } from './types';
+import { CreateTask, UpdateTask } from './types';
 
 export const useTask = (id: string) =>
   useSuspenseQuery({
     queryKey: ['task', id],
     queryFn: () => getTask(id),
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
-export const useTasks = (params: TaskQueryParams, { enabled = true } = {}) =>
+export const useTasks = ({ enabled }: { enabled: boolean }) =>
   useQuery({
-    queryKey: ['tasks', params],
-    queryFn: () => getAllTasks(params),
+    queryKey: ['tasks'],
+    queryFn: () => getAllTasks(),
     placeholderData: keepPreviousData,
     enabled,
   });

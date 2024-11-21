@@ -1,3 +1,3 @@
 export { default } from 'next-auth/middleware';
 
-export const config = { matcher: ['/tasks', '/tasks/:id', '/create'] };
+export const config = { matcher: ['/tasks/:path*', '/create'] };

@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { signUp } from "@/domains/auth";
 import { ErrorHelpers } from "@/services/error/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
