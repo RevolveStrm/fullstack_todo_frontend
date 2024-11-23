@@ -42,7 +42,10 @@ export const CreateTaskForm = () => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={onSubmit} className="flex flex-col w-[400px] gap-5">
+      <form
+        onSubmit={onSubmit}
+        className="flex flex-col gap-5 w-full px-4 md:px-0"
+      >
         <h2 className="font-sans text-3xl font-semibold">Create new task</h2>
 
         <div className="w-full mt-5 flex flex-col items-center gap-4">

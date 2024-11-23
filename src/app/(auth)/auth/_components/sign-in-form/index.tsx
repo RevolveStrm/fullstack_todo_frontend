@@ -40,13 +40,11 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
       });
 
       if (!response || !response.ok) {
-        toast.error(
-          response?.error || "Failed to sign in. Please check your credentials."
-        );
-        return;
+        throw response?.error;
       }
 
       toast.success("Welcome back! You have successfully signed in.");
+
       router.push("/tasks");
     } catch (error) {
       toast.error(
@@ -95,7 +93,7 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
         </div>
 
         <Link href={"/auth"}>
-          <p className="text-gray-300 text-sm text-right cursor-pointer">
+          <p className="text-gray-500 text-sm text-right cursor-pointer">
             Forgot your password?
           </p>
         </Link>

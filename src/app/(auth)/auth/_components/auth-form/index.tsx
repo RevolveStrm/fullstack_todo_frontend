@@ -16,7 +16,7 @@ export const AuthForm: React.FC<Props> = ({}) => {
   };
 
   return (
-    <div className="flex justify-center mt-20 mx-auto w-[720px]">
+    <div>
       {isSignIn ? (
         <SignInForm onSwitch={handleFormSwitch} />
       ) : (

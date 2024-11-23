@@ -3,7 +3,7 @@ import { Container } from "@/components/container";
 
 export default async function TasksPage() {
   return (
-    <main className="h-[64vh]">
+    <main>
       <Container className="mt-10">
         <TasksTable />
       </Container>
