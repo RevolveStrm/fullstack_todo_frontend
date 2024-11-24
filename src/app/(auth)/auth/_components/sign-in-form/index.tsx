@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeClosed } from "lucide-react";
@@ -9,7 +10,11 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { SignInData, signInSchema } from "./constants";
+import {
+  BAD_CREDENTIALS_AUTH_ERROR,
+  SignInData,
+  signInSchema,
+} from "./constants";
 
 interface Props {
   className?: string;
@@ -47,9 +52,11 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
 
       router.push("/tasks");
     } catch (error) {
-      toast.error(
-        "An error occurred while signing in. Please try again later."
-      );
+      const message: string =
+        error === BAD_CREDENTIALS_AUTH_ERROR
+          ? "Invalid email or password. Please try again."
+          : "An error occurred while signing in. Please try again later.";
+      toast.error(message);
       console.error(error);
     } finally {
       setLoading(false);
@@ -57,8 +64,8 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-      <h2 className="text-xl font-bold text-center">Login into account</h2>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+      <h2 className="text-2xl font-bold text-center">Login into account</h2>
 
       <p className="text-gray-500 text-center">
         Enter your email and password below to login
@@ -85,7 +92,7 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
             error={formState.errors.password?.message}
           />
           <div
-            className="absolute right-2 bottom-4 bg-white dark:bg-black px-1"
+            className="absolute right-2 bottom-6 bg-white dark:bg-black px-1 cursor-pointer"
             onClick={() => setIsPasswordShown(!isPasswordShown)}
           >
             {isPasswordShown ? <Eye /> : <EyeClosed />}
@@ -99,12 +106,12 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
         </Link>
       </div>
 
-      <button
+      <Button
         type="submit"
-        className="bg-black text-white dark:bg-white dark:text-black p-1 rounded-md font-semibold"
+        className="bg-black text-white dark:bg-white dark:text-black p-1 rounded-md font-semibold mt-2"
       >
-        {loading ? "Signing In..." : "Sign In"}
-      </button>
+        {loading ? "Signing In ..." : "Sign In"}
+      </Button>
 
       <p className="text-gray-500 text-center mt-2">
         Does not have an account?

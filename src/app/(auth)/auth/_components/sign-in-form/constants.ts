@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const BAD_CREDENTIALS_AUTH_ERROR = 'CredentialsSignin';
+
 export const signInSchema = z.object({
   email: z
     .string()

@@ -15,13 +15,9 @@ export const AuthForm: React.FC<Props> = ({}) => {
     setIsSignIn(!isSignIn);
   };
 
-  return (
-    <div>
-      {isSignIn ? (
-        <SignInForm onSwitch={handleFormSwitch} />
-      ) : (
-        <SignUpForm onSwitch={handleFormSwitch} />
-      )}
-    </div>
+  return isSignIn ? (
+    <SignInForm onSwitch={handleFormSwitch} />
+  ) : (
+    <SignUpForm onSwitch={handleFormSwitch} />
   );
 };
