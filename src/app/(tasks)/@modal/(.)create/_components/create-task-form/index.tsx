@@ -4,6 +4,8 @@ import { CustomSelect } from "@/components/custom-select";
 import { Spinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useAddTask } from "@/domains/task/hooks";
 import { ErrorHelpers } from "@/services/error/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,22 +51,30 @@ export const CreateTaskForm = () => {
         <h2 className="font-sans text-3xl font-semibold">Create new task</h2>
 
         <div className="w-full mt-5 flex flex-col items-center gap-4">
-          <label htmlFor="title" className="text-left w-full">
+          <Label htmlFor="title" className="text-left w-full">
             Title
-          </label>
-          <Input id="title" placeholder="Title" {...form.register("title")} />
-          <label htmlFor="description" className="text-left w-full">
-            Description
-          </label>
+          </Label>
           <Input
-            id="description"
-            placeholder="Description"
-            {...form.register("description")}
+            id="title"
+            placeholder="Enter your task title.."
+            {...form.register("title")}
           />
-          <label htmlFor="priority" className="text-left w-full">
-            Priority
-          </label>
 
+          <Label htmlFor="description" className="text-left w-full">
+            Description
+          </Label>
+          <Textarea
+            {...form.register("description")}
+            id="description"
+            name="description"
+            placeholder="Enter your task description.."
+            defaultValue={form.getValues("description")}
+            className="h-[150px] max-h-[200px]"
+          />
+
+          <Label htmlFor="priority" className="text-left w-full">
+            Priority
+          </Label>
           <CustomSelect name="priority" items={priorities} />
         </div>
 
