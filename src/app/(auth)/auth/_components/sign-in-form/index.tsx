@@ -41,6 +41,8 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
     const error: string | null = searchParams.get("error");
 
     if (error) {
+      setLoading(false);
+
       const message: string =
         error === BAD_CREDENTIALS_AUTH_ERROR
           ? "Invalid email or password. Please try again."
