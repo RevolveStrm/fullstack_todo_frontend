@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+export const tagSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  color: z.string(),
+});
+
+export type Tag = z.infer<typeof tagSchema>;
+
 export const TaskStatusEnum = z.enum(['TODO', 'IN_PROGRESS', 'DONE', 'CANCELED']);
 
 export type TaskStatus = z.infer<typeof TaskStatusEnum>;
@@ -15,8 +23,10 @@ export const taskSchema = z.object({
   status: TaskStatusEnum,
   priority: TaskPriorityEnum,
   createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime().optional(),
+  updatedAt: z.string().datetime().nullable().optional(),
+  deadlineAt: z.string().datetime().nullable().optional(),
   userId: z.string(),
+  tags: z.array(tagSchema),
 });
 
 export type Task = z.infer<typeof taskSchema>;

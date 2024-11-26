@@ -10,10 +10,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useTask, useUpdateTask } from "@/domains/task";
+import { useDeadlineTimeLeft, useTask, useUpdateTask } from "@/domains/task";
 import type { Task as TaskT } from "@/domains/task";
 import { ErrorHelpers } from "@/services/error/helpers";
-import { CalendarIcon, Pencil } from "lucide-react";
+import { CalendarIcon, Clock, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
@@ -25,7 +25,7 @@ type Props = {
 
 export type TaskFormValues = Pick<
   TaskT,
-  "title" | "description" | "status" | "priority"
+  "title" | "description" | "status" | "priority" | "deadlineAt"
 >;
 
 export const Task: React.FC<Props> = ({ id }) => {
@@ -33,6 +33,7 @@ export const Task: React.FC<Props> = ({ id }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { data: task, isLoading, error } = useTask(id);
   const { mutateAsync: updateTaskAction } = useUpdateTask();
+  const timeLeft = useDeadlineTimeLeft(task.deadlineAt);
 
   const onSubmit = async (data: TaskFormValues) => {
     try {
@@ -124,6 +125,21 @@ export const Task: React.FC<Props> = ({ id }) => {
                   <span>
                     Updated: {new Date(task.updatedAt).toLocaleString()}
                   </span>
+                </div>
+              )}
+              {task.deadlineAt && (
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <CalendarIcon className="w-4 h-4" />
+                    <span>
+                      Deadline: {new Date(task.deadlineAt).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    <span>Time left: {timeLeft}</span>
+                  </div>
                 </div>
               )}
             </div>

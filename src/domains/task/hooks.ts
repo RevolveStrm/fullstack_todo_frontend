@@ -53,3 +53,42 @@ export const useDeleteTask = () => {
     },
   });
 };
+
+import { useEffect, useState } from 'react';
+
+export const useDeadlineTimeLeft = (deadlineAt: string | null | undefined) => {
+  const [timeLeft, setTimeLeft] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!deadlineAt) {
+      setTimeLeft('No deadline set');
+      return;
+    }
+
+    const calculateTimeLeft = () => {
+      const deadline = new Date(deadlineAt);
+      const now = new Date();
+      const timeDiff = deadline.getTime() - now.getTime();
+
+      if (timeDiff <= 0) {
+        setTimeLeft('Deadline has passed');
+        return;
+      }
+
+      const days: number = Math.floor(timeDiff / (1000 * 3600 * 24));
+      const hours: number = Math.floor((timeDiff % (1000 * 3600 * 24)) / (1000 * 3600));
+      const minutes: number = Math.floor((timeDiff % (1000 * 3600)) / (1000 * 60));
+
+      const sign: string = days === 0 ? '🔥' : '';
+
+      setTimeLeft(`${days} days, ${hours} hours, ${minutes} minutes left ${sign}`);
+    };
+
+    calculateTimeLeft();
+    const intervalId = setInterval(calculateTimeLeft, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [deadlineAt]);
+
+  return timeLeft;
+};

@@ -2,12 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeClosed } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import {
@@ -15,7 +17,6 @@ import {
   SignInData,
   signInSchema,
 } from "./constants";
-
 interface Props {
   className?: string;
   onSwitch: VoidFunction;
@@ -23,6 +24,8 @@ interface Props {
 
 export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [isPasswordShown, setIsPasswordShown] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { register, handleSubmit, formState } = useForm<SignInData>({
@@ -34,33 +37,28 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
     reValidateMode: "onChange",
   });
 
-  const onSubmit = async (data: SignInData) => {
-    try {
-      setLoading(true);
+  useEffect(() => {
+    const error: string | null = searchParams.get("error");
 
-      const response = await signIn("credentials", {
-        redirect: false,
-        email: data.email,
-        password: data.password,
-      });
-
-      if (!response || !response.ok) {
-        throw response?.error;
-      }
-
-      toast.success("Welcome back! You have successfully signed in.");
-
-      router.push("/tasks");
-    } catch (error) {
+    if (error) {
       const message: string =
         error === BAD_CREDENTIALS_AUTH_ERROR
           ? "Invalid email or password. Please try again."
           : "An error occurred while signing in. Please try again later.";
       toast.error(message);
-      console.error(error);
-    } finally {
-      setLoading(false);
+
+      router.replace("/auth");
     }
+  }, [router, searchParams]);
+
+  const onSubmit = async (data: SignInData) => {
+    setLoading(true);
+
+    await signIn("credentials", {
+      redirect: true,
+      callbackUrl: "/tasks?success",
+      ...data,
+    });
   };
 
   return (
@@ -113,7 +111,9 @@ export const SignInForm: React.FC<Props> = ({ onSwitch }) => {
         {loading ? "Signing In ..." : "Sign In"}
       </Button>
 
-      <p className="text-gray-500 text-center mt-2">
+      <Separator className="mt-2" />
+
+      <p className="text-gray-500 text-center">
         Does not have an account?
         <span
           onClick={onSwitch}
