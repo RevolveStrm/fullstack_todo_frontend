@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Providers } from "@/components/providers";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import { Header } from "./_components/header";
 
 const inter = Inter({
@@ -47,7 +48,9 @@ export default function RootLayout({ children }: Props) {
         className={`${inter.variable} min-h-screen min-w-full light:bg-zinc-50 light:text-zinc-900 dark:bg-neutral-950 dark:text-neutral-50`}
       >
         <Providers>
-          <Header showUserNav />
+          <Suspense>
+            <Header showUserNav />
+          </Suspense>
           {children}
         </Providers>
       </body>
