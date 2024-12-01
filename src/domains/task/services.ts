@@ -1,6 +1,6 @@
 import http from '@/services/http';
 import { Task } from './schema';
-import { CreateTask, UpdateTask } from './types';
+import type { CreateTask, UpdateTask } from './types';
 
 export const getTask = async (id: string): Promise<Task> => {
   return (await http.get<Task>(`/tasks/${id}`))?.data;

@@ -12,10 +12,10 @@ export default function TaskPage({
   params: { id: string };
 }) {
   return (
-    <main className="h-[64vh]">
+    <main>
       <Container className="mt-10 flex flex-col items-start">
-        <Link href="/tasks">
-          <Button>
+        <Link href="/tasks" className="w-full md:w-auto lg:mt-2">
+          <Button variant="default" className="h-8 px-2 lg:px-3 w-full">
             Back to tasks <ArrowLeft />
           </Button>
         </Link>

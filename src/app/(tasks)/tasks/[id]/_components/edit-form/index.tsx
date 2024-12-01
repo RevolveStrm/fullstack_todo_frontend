@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload } from "@/components/upload";
+import { MAX_FILES_COUNT_PER_TASK, TaskFile } from "@/domains/file";
 import { Task } from "@/domains/task";
 import { Save, X } from "lucide-react";
 import React from "react";
@@ -20,6 +21,7 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
+import { FileCard } from "../../../_components/file-card";
 import {
   priorities,
   statuses,
@@ -30,9 +32,16 @@ interface Props {
   className?: string;
   task: Task;
   onFormSubmit: SubmitHandler<TaskFormValues>;
+  onFileUpload: (file: File) => void;
+  onFileDelete: (fileId: string) => void;
 }
 
-export const EditForm: React.FC<Props> = ({ task, onFormSubmit }) => {
+export const EditForm: React.FC<Props> = ({
+  task,
+  onFormSubmit,
+  onFileUpload,
+  onFileDelete,
+}) => {
   const form = useForm<TaskFormValues>({
     defaultValues: {
       title: task.title,
@@ -77,14 +86,25 @@ export const EditForm: React.FC<Props> = ({ task, onFormSubmit }) => {
                 />
               </AccordionContent>
             </AccordionItem>
-            {/* <AccordionItem value="item-files">
+
+            <AccordionItem value="item-files">
               <AccordionTrigger>
                 <Label htmlFor="files">Files</Label>
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-2">
-                <Upload/>
+                {task.files.map((file: TaskFile) => (
+                  <FileCard
+                    key={file.id}
+                    file={file}
+                    onDelete={() => onFileDelete(file.id)}
+                  />
+                ))}
+                {task.files.length < MAX_FILES_COUNT_PER_TASK && (
+                  <Upload onUpload={onFileUpload} />
+                )}
               </AccordionContent>
-            </AccordionItem> */}
+            </AccordionItem>
+
             <AccordionItem value="item-deadline">
               <AccordionTrigger>
                 <Label htmlFor="deadlineAt">Deadline</Label>
@@ -111,45 +131,6 @@ export const EditForm: React.FC<Props> = ({ task, onFormSubmit }) => {
                 </div>
               </AccordionContent>
             </AccordionItem>
-            {/* <AccordionItem value="item-2">
-              <AccordionTrigger>
-                <Label htmlFor="tags">Tags</Label>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-2">
-                  <div className="flex flex-wrap gap-2">
-                    {task.tags.map((tag, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center bg-primary text-primary-foreground rounded-full px-3 py-1"
-                      >
-                        <span>{tag.title}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="ml-2 h-5 w-5 p-0"
-                          onClick={() => handleRemoveTag(tag.id)}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <Input
-                      type="text"
-                      value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
-                      placeholder="Add new tag"
-                    />
-                    <Button type="button" onClick={handleAddTag}>
-                      Add
-                    </Button>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem> */}
           </Accordion>
         </div>
 

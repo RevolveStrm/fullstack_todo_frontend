@@ -41,7 +41,7 @@ export const Header: React.FC<Props> = ({ showUserNav }) => {
         <Link href="/">
           <ListTodo size={48} />
         </Link>
-        <div className="flex gap-4">
+        <div className="space-x-3">
           <ModeToggle />
           {showUserNav && session && <UserNav email={email} />}
         </div>

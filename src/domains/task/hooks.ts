@@ -5,6 +5,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { createTask, deleteTask, getAllTasks, getTask, updateTask } from './services';
 import { CreateTask, UpdateTask } from './types';
 
@@ -53,8 +54,6 @@ export const useDeleteTask = () => {
     },
   });
 };
-
-import { useEffect, useState } from 'react';
 
 export const useDeadlineTimeLeft = (deadlineAt: string | null | undefined) => {
   const [timeLeft, setTimeLeft] = useState<string | null>(null);

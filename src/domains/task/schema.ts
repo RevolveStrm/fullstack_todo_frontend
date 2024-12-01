@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { taskFileSchema } from '../file';
 
 export const tagSchema = z.object({
   id: z.string(),
@@ -27,6 +28,7 @@ export const taskSchema = z.object({
   deadlineAt: z.string().datetime().nullable().optional(),
   userId: z.string(),
   tags: z.array(tagSchema),
+  files: z.array(taskFileSchema),
 });
 
 export type Task = z.infer<typeof taskSchema>;

@@ -1,6 +1,12 @@
 "use client";
 
 import { Spinner } from "@/components/spinner";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,13 +16,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useDeadlineTimeLeft, useTask, useUpdateTask } from "@/domains/task";
-import type { Task as TaskT } from "@/domains/task";
+import { Label } from "@/components/ui/label";
+import { TaskFile, useDeleteTaskFile, useUploadTaskFile } from "@/domains/file";
+import {
+  useDeadlineTimeLeft,
+  useDeleteTask,
+  useTask,
+  useUpdateTask,
+} from "@/domains/task";
+import type { Task as TaskType } from "@/domains/task";
 import { ErrorHelpers } from "@/services/error/helpers";
-import { CalendarIcon, Clock, Pencil } from "lucide-react";
+import { CalendarIcon, Clock, Pencil, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { FileCard } from "../../../_components/file-card";
 import { EditForm } from "../edit-form";
 
 type Props = {
@@ -24,7 +38,7 @@ type Props = {
 };
 
 export type TaskFormValues = Pick<
-  TaskT,
+  TaskType,
   "title" | "description" | "status" | "priority" | "deadlineAt"
 >;
 
@@ -33,6 +47,9 @@ export const Task: React.FC<Props> = ({ id }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { data: task, isLoading, error } = useTask(id);
   const { mutateAsync: updateTaskAction } = useUpdateTask();
+  const { mutateAsync: deleteTaskAction } = useDeleteTask();
+  const { mutateAsync: uploadTaskFileAction } = useUploadTaskFile(id);
+  const { mutateAsync: deleteTaskFileAction } = useDeleteTaskFile(id);
   const timeLeft = useDeadlineTimeLeft(task.deadlineAt);
 
   const onSubmit = async (data: TaskFormValues) => {
@@ -42,6 +59,59 @@ export const Task: React.FC<Props> = ({ id }) => {
         {
           onSuccess() {
             toast.success(`Updated task ${task.title}`);
+          },
+        }
+      );
+    } catch (error) {
+      const message: string | undefined = ErrorHelpers.getMessage(error);
+      if (message) {
+        toast.error(message);
+      }
+    }
+  };
+
+  const onDeleteTask = async () => {
+    try {
+      await deleteTaskAction(task.id, {
+        onSuccess() {
+          toast.success(`Successfully removed task: "${task.title}"`);
+
+          router.push("/tasks");
+        },
+      });
+    } catch (error) {
+      const message: string | undefined = ErrorHelpers.getMessage(error);
+      if (message) {
+        toast.error(message);
+      }
+    }
+  };
+
+  const onUploadTaskFile = async (file: File) => {
+    try {
+      await uploadTaskFileAction(
+        { taskId: task.id, file },
+        {
+          onSuccess() {
+            toast.success(`Uploaded file to task ${task.title}`);
+          },
+        }
+      );
+    } catch (error) {
+      const message: string | undefined = ErrorHelpers.getMessage(error);
+      if (message) {
+        toast.error(message);
+      }
+    }
+  };
+
+  const onDeleteTaskFile = async (fileId: string) => {
+    try {
+      await deleteTaskFileAction(
+        { fileId },
+        {
+          onSuccess() {
+            toast.success(`Removed file from task ${task.title}`);
           },
         }
       );
@@ -89,17 +159,27 @@ export const Task: React.FC<Props> = ({ id }) => {
           <CardTitle>Task Details</CardTitle>
           <CardDescription>View and manage task information</CardDescription>
         </div>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
+        <div className="space-x-3 flex justify-center">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setIsEditing(!isEditing)}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={onDeleteTask}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="mt-4">
         {isEditing ? (
-          <EditForm onFormSubmit={onSubmit} task={task} />
+          <EditForm
+            onFormSubmit={onSubmit}
+            onFileUpload={onUploadTaskFile}
+            onFileDelete={onDeleteTaskFile}
+            task={task}
+          />
         ) : (
           <div className="space-y-6">
             <div>
@@ -141,6 +221,24 @@ export const Task: React.FC<Props> = ({ id }) => {
                     <span>Time left: {timeLeft}</span>
                   </div>
                 </div>
+              )}
+              {!!task.files?.length && (
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-files">
+                    <AccordionTrigger>
+                      <Label>Files</Label>
+                    </AccordionTrigger>
+                    <AccordionContent className="flex flex-col gap-2">
+                      {task.files.map((file: TaskFile) => (
+                        <FileCard
+                          key={file.id}
+                          file={file}
+                          onDelete={onDeleteTaskFile}
+                        />
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               )}
             </div>
           </div>

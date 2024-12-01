@@ -50,7 +50,7 @@ export const SignUpForm: React.FC<Props> = ({ onSwitch }) => {
 
       onSwitch();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       const message: string | undefined = ErrorHelpers.getMessage(error);
       toast.error(message ?? "Could not sign up your account!");
     } finally {
